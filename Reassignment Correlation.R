@@ -9,3 +9,9 @@ cor.test( ~ business_completion_hours+incident_reassignments, modified_incidents
           subset = (priority == "Medium"))
 cor.test( ~ business_completion_hours+incident_reassignments, modified_incidents,
           subset = (priority == "High"))
+
+#Create table for plotting purposes
+reassignments <- modified_incidents$incident_reassignments
+bus_comp_hrs <- modified_incidents$business_completion_hours
+priorities <- modified_incidents$priority
+cor_table <- data.frame(reassignments, bus_comp_hrs, priorities)
