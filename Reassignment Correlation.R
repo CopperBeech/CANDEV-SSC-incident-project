@@ -2,7 +2,7 @@
 incident_owner_history <- read.csv(file = "SSC dataset/INCIDENT_OWNER_HISTORY.csv",
                              col.names = c("ticket_number", "status", "assigned_group",
                                            "parent_service", "service", "change_date",
-                                                                                      "time_in_status_by_owner_hours"))
+                                           "time_in_status_by_owner_hours"))
 head(incident_owner_history)
 ##Create a list where each element is a data frame for each ticket
 incident_owner_history_list <- split.data.frame(incident_owner_history, incident_owner_history$ticket_number)
@@ -26,3 +26,8 @@ incident_reassignments <- sapply(incident_owner_history_list, number_of_reassign
 #Output a plot and the correlation
 plot(incident_reassignments, incident_times)
 cor.test(incident_reassignments, incident_times, alternative = "two.sided", method = "pearson")
+ 
+#Now do the same for the log of the time
+log_incident_times <- log1p(incident_times)
+plot(incident_reassignments, log_incident_times)
+cor.test(incident_reassignments, log_incident_times, alternative = "two.sided", method = "pearson")
