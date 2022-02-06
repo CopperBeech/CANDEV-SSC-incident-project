@@ -1,5 +1,5 @@
-#from pathlib import Path
-#Path('my_data.db').touch()
+from pathlib import Path
+Path('my_data.db').touch()
 import sqlite3
 import pandas as pd
 conn = sqlite3.connect('my_data.db')
