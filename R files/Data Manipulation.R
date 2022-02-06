@@ -1,13 +1,17 @@
-incidents <- read.csv("SSC dataset/INCIDENTS.csv", numerals = "allow.loss", 
-                      col.names = c("ticket_number", 
+#Import data files
+incidents_filepath <- "C:\\Users\\Joseph Barss\\Documents\\R working directory\\SSC-IT-incident-management\\SSC dataset\\INCIDENTS.csv"
+
+incidents <- read.csv(file = incidents_filepath, col.names = c("ticket_number", 
                                     "parent_service", "service", "org_id", "assigned_group", 
                                     "open_date", "close_date", "priority", "status", "actual_completion_hours",
                                     "business_completion_hours", "aging", "class_structure_id",
                                     "class_structure", "classification_id", "classification",
                                     "external_system", "global_ticket_id", "closure_code", "last_modified_date"))
 
-incident_owner_history <- read.csv(file = "SSC dataset/INCIDENT_OWNER_HISTORY.csv",
-                                   col.names = c("ticket_number", "status", "assigned_group",
+incident_owner_history_filepath <- "C:\\Users\\Joseph Barss\\Documents\\R working directory\\SSC-IT-incident-management\\SSC dataset\\INCIDENT_OWNER_HISTORY.csv"
+
+incident_owner_history <- read.csv(file = incident_owner_history_filepath, col.names = c(
+                                                 "ticket_number", "status", "assigned_group",
                                                  "parent_service", "service", "change_date",
                                                  "time_in_status_by_owner_hours"))
 
@@ -73,6 +77,8 @@ modified_incidents <- cbind(incidents[, c(1, 3, 4, 5)], incident_reassignments,
 modified_incidents <- modified_incidents[modified_incidents$actual_completion_hours >= 0, ]
 #Remove incidents where the business completion hours was over 10,000 (due to data entry error)
 modified_incidents <- modified_incidents[modified_incidents$business_completion_hours < 10000, ]
+#Create new .csv file
+write.csv(modified_incidents, file = "MODIFIED_INCIDENTS.csv", row.names = FALSE)
 
 ##### This is to create a modified version of INCIDENT_OWNER_HISTORY
 
@@ -99,3 +105,5 @@ modified_owner_history_list <- lapply(owner_history_list, add_service_column)
 modified_owner_history_list <- lapply(modified_owner_history_list, add_groups_column)
 #Bind the list of data frames back into a long data frame
 modified_owner_history <- do.call(rbind, modified_owner_history_list)
+#Create new .csv file
+write.csv(modified_owner_history, file = "MODIFIED_OWNER_HISTORY.csv", row.names = FALSE)

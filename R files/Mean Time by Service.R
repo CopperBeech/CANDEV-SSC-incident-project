@@ -17,4 +17,6 @@ mean_actual_time_by_service <- sapply(incidents_by_service, mean_actual_hours)
 mean_business_time_by_service <- sapply(incidents_by_service, mean_business_hours)
 
 mean_service_times <- cbind.data.frame(mean_actual_time_by_service, mean_business_time_by_service)
-print(mean_service_times)
+
+#Create new .csv file of mean service times
+write.csv(mean_service_times, file = "MEAN_SERVICE_TIMES.csv", row.names = FALSE)

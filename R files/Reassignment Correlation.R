@@ -15,3 +15,6 @@ reassignments <- modified_incidents$incident_reassignments
 bus_comp_hrs <- modified_incidents$business_completion_hours
 priorities <- modified_incidents$priority
 cor_table <- data.frame(reassignments, bus_comp_hrs, priorities)
+
+#Create .csv file of table
+write.csv(cor_table, file = "CORRELATION_TABLE.csv", row.names = FALSE)
