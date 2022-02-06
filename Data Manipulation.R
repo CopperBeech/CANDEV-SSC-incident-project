@@ -71,3 +71,25 @@ modified_incidents <- cbind(incidents[, c(1, 3, 4, 5)], incident_reassignments,
 modified_incidents <- modified_incidents[modified_incidents$actual_completion_hours >= 0, ]
 #Remove incidents where the business completion hours was over 10,000 (due to data entry error)
 modified_incidents <- modified_incidents[modified_incidents$business_completion_hours < 10000, ]
+
+##### This is to create a modified version of INCIDENT_OWNER_HISTORY
+
+#This function will add a column telling the number of services that handled an incident
+add_service_column <- function(ticket){
+  services <- ticket$service
+  services <- unique(services)
+  number_of_services <- length(services)
+  cbind(ticket, number_of_services)
+}
+#This function will add a column telling the number of groups that handled an incident
+add_groups_column <- function(ticket){
+  groups <- ticket$assigned_group
+  groups <- unique(groups)
+  number_of_groups <- length(groups)
+  cbind(ticket, number_of_groups)
+}
+#Apply the functions to the list of data frames
+modified_owner_history_list <- lapply(incident_owner_history_list, add_service_column)
+modified_owner_history_list <- lapply(modified_owner_history_list, add_groups_column)
+#Bind the list of data frames back into a long data frame
+modified_owner_history <- do.call(rbind, modified_owner_history_list)
