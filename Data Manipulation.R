@@ -74,6 +74,9 @@ modified_incidents <- modified_incidents[modified_incidents$business_completion_
 
 ##### This is to create a modified version of INCIDENT_OWNER_HISTORY
 
+#Remove rows in which no service is given
+owner_history <- incident_owner_history[!(incident_owner_history$service == ""), c(1:5, 7)]
+owner_history_list <- split.data.frame(owner_history, owner_history$ticket_number)
 #This function will add a column telling the number of services that handled an incident
 add_service_column <- function(ticket){
   services <- ticket$service
@@ -88,8 +91,9 @@ add_groups_column <- function(ticket){
   number_of_groups <- length(groups)
   cbind(ticket, number_of_groups)
 }
+
 #Apply the functions to the list of data frames
-modified_owner_history_list <- lapply(incident_owner_history_list, add_service_column)
+modified_owner_history_list <- lapply(owner_history_list, add_service_column)
 modified_owner_history_list <- lapply(modified_owner_history_list, add_groups_column)
 #Bind the list of data frames back into a long data frame
 modified_owner_history <- do.call(rbind, modified_owner_history_list)
